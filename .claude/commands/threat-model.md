@@ -128,3 +128,11 @@ Consider real-world factors:
 - **Skip what doesn't apply.** If the system doesn't handle file uploads, don't list file upload threats. If there's no admin interface, don't model admin privilege escalation.
 - **Prioritize.** A threat model with 50 items is useless. Focus on the threats that matter most given this system's specific architecture and data sensitivity.
 - **Acknowledge unknowns.** If you can't determine something from the code (e.g., infrastructure configuration, WAF rules, network segmentation), say so rather than assuming.
+
+## Saving the Report
+
+After completing the threat model, save the report to disk:
+
+1. Create the output directory if it doesn't exist: `security-reviews/`
+2. Write the full threat model report to `security-reviews/threat-model-YYYY-MM-DD.md` using today's date.
+3. Confirm the file path to the user after saving.

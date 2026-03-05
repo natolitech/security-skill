@@ -388,15 +388,15 @@ Before releasing a version, run the full suite:
 
 The security review catches code-level issues. The threat model provides the architectural view. Together they cover both tactical vulnerabilities and strategic security gaps.
 
-Save the outputs alongside your release notes or in your security documentation:
+Both skills automatically save their output to a `security-reviews/` directory in your project root:
 
-```bash
-# Save outputs to docs
-mkdir -p docs/security
-# Copy the outputs from Claude Code into:
-# docs/security/security-review-YYYY-MM-DD.md
-# docs/security/threat-model-YYYY-MM-DD.md
 ```
+security-reviews/
+  security-review-2026-03-05.md
+  threat-model-2026-03-05.md
+```
+
+You can commit these alongside your release notes or keep them for audit records.
 
 ### After a Security Incident
 

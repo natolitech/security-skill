@@ -261,3 +261,11 @@ When the user invokes this skill, determine the scope:
 - **If reviewing a diff/PR:** Focus on the changed code, but check that changes don't break existing security properties. Check for new attack surface introduced.
 
 Always read the actual code. Never generate findings based on assumptions about what the code might contain. If you cannot access a file, say so — do not fabricate findings.
+
+## Saving the Report
+
+After completing the review, save the report to disk:
+
+1. Create the output directory if it doesn't exist: `security-reviews/`
+2. Write the full security review report to `security-reviews/security-review-YYYY-MM-DD.md` using today's date.
+3. Confirm the file path to the user after saving.
