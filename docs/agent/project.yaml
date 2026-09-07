@@ -1,0 +1,20 @@
+name: security-skill
+prefix: SS
+language: unknown
+commands:
+  test: echo "set commands.test in docs/agent/project.yaml"
+writable:
+- src/
+- docs/
+- tests/
+forbidden:
+- migrations/
+- .github/workflows/
+- .env*
+security_profile: feature
+models:
+  planner: openrouter/z-ai/glm-5.3-flash
+  builder: openrouter/z-ai/glm-5.3-flash
+  builder_hard: openrouter/moonshotai/kimi-k2
+  checker: openrouter/z-ai/glm-5.3-flash
+runtime: opencode
