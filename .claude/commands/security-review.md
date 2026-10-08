@@ -189,7 +189,7 @@ For each finding, provide:
 [What the vulnerability is and why it matters. Be specific — reference the actual code.]
 
 **Evidence:**
-[The specific code that is vulnerable, quoted with line numbers]
+[The specific code that is vulnerable, quoted with line numbers — redact any secret values per the rule below]
 
 **Remediation:**
 [Concrete fix. Show the corrected code pattern. Don't just say "sanitize input."]
@@ -197,6 +197,8 @@ For each finding, provide:
 **References:**
 [CWE number, relevant OWASP page, or framework-specific security docs]
 ```
+
+**Never reproduce secret values in the report.** Reports are written to disk and frequently committed alongside code. If the vulnerable code contains a hardcoded credential, API key, token, or password, redact it in the evidence — show at most the first and last 4 characters (e.g., `sk-pr…9x2Q`) — and state that the secret is exposed in source and must be rotated. Quoting a secret in full creates a second committed copy of it.
 
 ## Severity Ratings
 
