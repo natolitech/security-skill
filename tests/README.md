@@ -33,6 +33,14 @@ The corpus in `fixtures/vuln-app/` is an intentionally vulnerable application (S
 | Redaction | No planted secret literal verbatim; first/last 4 chars max, rotation stated |
 | Format | Finding IDs (`SR-NNN`) and confidence ratings present |
 
+## Recorded Baselines
+
+| Date | Run | Result |
+|------|-----|--------|
+| 2026-10-08 | Fresh-session review (no fixture knowledge), skill v2.0.0 | **35/36 planted findings (97.2%)**, 0/4 control false-positives, redaction PASS. Miss: VF-27 open redirect on `/login?next=`. Band deviations: VF-03/VF-09 downgraded with correct dead-code justification (verification pass working as designed); VF-10 JWT algorithm pinning folded into a Low finding; VF-34 DEBUG rated Informational. Bonus legitimate findings: missing security headers, no lockfile, 50 MB body limit, 30-day JWTs. |
+
+Notes for future skill work: open redirect on query-parameter redirects is a known miss — check the Open Redirect guidance if regressing. The keyword scorer counted VF-27 as covered via unrelated "redirect" mentions in SSRF/CSRF findings; always confirm misses manually.
+
 ## Notes
 
 - The fixture contains no labels or markers identifying the bugs — the skill must find them by analysis. Keep it that way when editing.
