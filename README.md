@@ -50,6 +50,8 @@ Produces a STRIDE-based threat model by analyzing the actual codebase — not a 
 
 Both commands write to a `security-reviews/` directory in your project: timestamped markdown reports, a machine-readable `findings-*.json` index from `/security-review` (for CI diffs and trend tracking), and a triage `backlog.md` that suppresses known false-positives and risk-accepted items on repeat runs. Repeat reviews include a "Since Last Review" delta section, and each skill reads the other's prior output to focus its analysis. See [INSTALL.md](INSTALL.md) for details.
 
+See [INSTALL.md](INSTALL.md) for full usage details, and [examples/](examples/) for complete, real example outputs from both commands.
+
 ## What's Included
 
 | File | Purpose |
@@ -57,6 +59,7 @@ Both commands write to a `security-reviews/` directory in your project: timestam
 | `.claude/commands/security-review.md` | Code-level vulnerability review skill |
 | `.claude/commands/threat-model.md` | Architecture-level threat modeling skill |
 | `install.sh` | One-command installer for the two skills (see INSTALL.md Method 4) |
+| `examples/` | Real end-to-end outputs from both skills, with walkthroughs |
 
 ### Regression Corpus (this repo only)
 

@@ -162,6 +162,8 @@ Then open Claude Code in your project. The skills should appear as available sla
 
 ## Usage
 
+> Complete, real example outputs for every workflow below — including a triaged backlog and a delta review — are in [examples/](examples/).
+
 ### Running a Security Review
 
 The `/security-review` command performs a code-level vulnerability analysis. It reads your actual source code, traces data flows, and reports specific findings with file paths and line numbers.
