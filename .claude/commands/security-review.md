@@ -181,10 +181,15 @@ What to look for:
 
 #### Vulnerable Dependencies
 
-What to look for:
-- Check lock files (package-lock.json, yarn.lock, poetry.lock, Gemfile.lock) for known CVEs — note any obviously outdated security-critical packages
-- Pinned to vulnerable versions of major frameworks
-- Dependencies pulled from untrusted registries or unpinned git references
+Be honest about the limits here: reading a lockfile is not a vulnerability database, and you cannot reliably know which exact versions have known CVEs. Do not fabricate CVE numbers and do not claim a package "has a known vulnerability" unless you are certain.
+
+What to look for statically:
+- Abandoned or EOL packages: framework versions years past end-of-life, unmaintained packages (no publishes in years), deprecated packages with successor warnings
+- Security-critical packages far behind current majors: auth libraries, crypto libraries, frameworks, session stores
+- Dependencies from untrusted registries, unpinned git references, `*` version ranges in manifests, or direct tarball URLs (supply-chain risk)
+- Lock files absent entirely while manifests are in use (non-reproducible installs)
+
+Always recommend concrete scanning as follow-up: `osv-scanner`, `npm audit` / `pip-audit` / `cargo audit`, and Dependabot or Renovate for continuous updates. Report dependency findings as Informational or Low unless you can trace actual vulnerable usage in code.
 
 #### Path Traversal
 
@@ -245,7 +250,10 @@ What to look for:
 - Hardcoded secrets in source: API keys, database passwords, JWT secrets, encryption keys — check for string literals that look like keys/tokens
 - Secrets in committed files: `.env` files in git, config files with credentials, `docker-compose.yml` with inline passwords
 - Secrets in client-side code: API keys in frontend JavaScript bundles
+- Committed history: whether `.gitignore` covers `.env*`, and whether secrets were committed before it did — history needs purging (git filter-repo / BFG) plus rotation, not just deletion
 - Insufficient secret rotation: No mechanism to rotate keys without redeployment
+
+You cannot exhaustively find secrets by eye. Recommend dedicated scanners as follow-up: `gitleaks detect` or `trufflehog`, plus GitHub push protection. Any secret you do find must be redacted per the reporting rule — never reproduced in the report.
 
 #### LLM-Application Security
 
