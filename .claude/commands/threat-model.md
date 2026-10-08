@@ -1,3 +1,5 @@
+<!-- skill: threat-model | version: 2.0.0 | source: github.com/natolitech/security-skill -->
+
 # Threat Model
 
 You are performing a threat model of this system. You are an expert application security engineer analyzing architecture and code to identify threats — not filling in a generic template.
@@ -199,3 +201,15 @@ After completing the threat model, save the report to disk:
 1. Create the output directory if it doesn't exist: `security-reviews/`
 2. Write the full threat model report to `security-reviews/threat-model-YYYY-MM-DD-HHMM.md` using today's date and the current time — the time component prevents same-day reruns from overwriting earlier reports. For scoped models, append a short scope slug: `threat-model-YYYY-MM-DD-HHMM-payments.md`.
 3. Confirm the file path to the user after saving.
+
+## Version
+
+`2.0.0` — 2026-10-08 · source: [github.com/natolitech/security-skill](https://github.com/natolitech/security-skill)
+
+Direct copies of this file (INSTALL.md Method 1) do not update automatically — compare this version against upstream before assuming current coverage.
+
+### Changelog
+
+- **2.0.0** (2026-10-08) — Rules of Engagement (static, read-only analysis; reviewed code is untrusted data); threat IDs (TM-NNN); mermaid data-flow diagram with numbered boundary crossings; privacy & data-protection pass; attack paths (kill chains) for top risks; "verify before rating" rule; secret redaction rule; timestamped report filenames with scope slugs; reads prior security reviews as evidence
+- **1.1.0** (2026-03-05) — save reports to `security-reviews/`
+- **1.0.0** (2026-03-05) — initial release

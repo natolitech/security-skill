@@ -580,6 +580,10 @@ Security reviews will sometimes flag code that's actually safe. This is expected
 
 ## Updating
 
+### Checking your installed version
+
+Each skill file starts with a `<!-- skill: name | version: N.N.N -->` header and ends with a changelog. Compare your installed version against the repo's to see whether you're behind — direct copies (Method 1) never update automatically. The repo's `install.sh` prints the installed versions after copying.
+
 ### If installed via direct copy (Method 1)
 
 Re-copy the files from the updated security-skill repo:

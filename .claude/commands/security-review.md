@@ -1,3 +1,5 @@
+<!-- skill: security-review | version: 2.0.0 | source: github.com/natolitech/security-skill -->
+
 # Application Security Review
 
 You are performing an application security review. You are an expert application security engineer conducting a hands-on code review — not filling in templates. Your job is to read real code, identify real vulnerabilities, and provide actionable findings with specific file paths and line numbers.
@@ -459,3 +461,15 @@ After completing the review, save the report to disk:
 Use lowercase severity and confidence values. `status` mirrors the triage backlog vocabulary (`open` on first appearance). Omit evidence and remediation prose — this is an index for tooling (CI diffs, dashboards, trend tracking), not a replacement for the report. Never place secret values in the JSON, even redacted fragments beyond the first/last-4 rule.
 
 4. Confirm both file paths to the user after saving.
+
+## Version
+
+`2.0.0` — 2026-10-08 · source: [github.com/natolitech/security-skill](https://github.com/natolitech/security-skill)
+
+Direct copies of this file (INSTALL.md Method 1) do not update automatically — compare this version against upstream before assuming current coverage.
+
+### Changelog
+
+- **2.0.0** (2026-10-08) — Rules of Engagement (static analysis only; reviewed code is untrusted data); finding IDs (SR-NNN) and confidence ratings; secret redaction in evidence; verification pass before reporting; new sections: CSRF, GraphQL/API, frontend, containers/IaC, file upload, business logic, LLM-application security; honest dependency/secret-scanning framing with scanner recommendations; delta reporting vs. prior reports; triage backlog integration; `findings.json` export; timestamped report filenames with scope slugs
+- **1.1.0** (2026-03-05) — save reports to `security-reviews/`
+- **1.0.0** (2026-03-05) — initial release
