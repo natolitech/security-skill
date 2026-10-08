@@ -407,6 +407,16 @@ security-reviews/
 
 Filenames include a timestamp so same-day reruns don't overwrite earlier reports, and scoped reviews append a short slug (e.g., `security-review-2026-03-05-1430-auth.md`).
 
+### Ongoing Tracking (Triage Backlog)
+
+Repeat reviews stay signal-heavy through a lightweight triage file. The review skill maintains `security-reviews/backlog.md`:
+
+1. Each review appends its findings with status `open`
+2. Your team triages them by editing Status: `confirmed`, `false-positive`, `risk-accepted`, or `resolved`
+3. The next review reads the backlog and adapts: known false-positives at unchanged code are suppressed (counted, not re-reported), risk-accepted items are collapsed into a one-line list unless their context changed (new exposure, more sensitive data), and re-escalation is called out explicitly
+
+This mirrors how security teams run finding backlogs — the point is that human decisions persist between runs and alert fatigue doesn't accumulate.
+
 You can commit these alongside your release notes or keep them for audit records.
 
 ### After a Security Incident

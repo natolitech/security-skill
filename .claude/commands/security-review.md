@@ -408,6 +408,26 @@ When writing the report, include a "Since Last Review" section (see Output Struc
 
 A returning reader cares most about what changed; place this section immediately after the Executive Summary.
 
+## Triage Backlog
+
+If `security-reviews/backlog.md` exists, read it before reporting. It records human triage decisions for past findings. Apply them when writing the report:
+
+- **false-positive** at the same location with unchanged code: do not re-report. State the count of suppressed known false-positives in one line.
+- **risk-accepted** and still present: collapse into a single "Previously risk-accepted" list (ID + location, one line each) instead of full findings — unless the context changed (new exposure, more sensitive data, internet-facing now). If it changed, re-report fully and note why it is re-escalated.
+- **confirmed** / **resolved**: handled by normal reporting and the delta comparison.
+
+After saving the report, update the backlog: create `security-reviews/backlog.md` from the template below if it is missing, and append this report's findings with status `open`. Never modify human-entered statuses — triage is a human decision; the skill only adds rows.
+
+```markdown
+# Security Finding Backlog
+
+Human triage decisions for security-review findings. After each review, update Status for its findings.
+Statuses: open | confirmed | false-positive | risk-accepted | resolved
+
+| ID | Report | Location | Finding | Status | Notes |
+|----|--------|----------|---------|--------|-------|
+```
+
 ## Saving the Report
 
 After completing the review, save the report to disk:
