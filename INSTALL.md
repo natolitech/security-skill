@@ -273,6 +273,9 @@ Date, scope, and detected stack
 ## Executive Summary
 Brief overall assessment and finding counts
 
+## Since Last Review
+Delta vs. the previous report: New / Resolved / Persisted findings (or "Baseline review")
+
 ## Critical and High Findings
 Each finding includes:
   - Severity and title

@@ -354,6 +354,10 @@ Use these severity levels based on impact and exploitability:
 - Low: N
 - Informational: N
 
+## Since Last Review
+
+[If a prior report exists: New / Resolved / Persisted — IDs and one-line summaries each. If none: "Baseline review — no prior report found."]
+
 ## Critical and High Findings
 
 [Detailed findings using the format above, ordered by severity]
@@ -385,6 +389,22 @@ When the user invokes this skill, determine the scope:
 - **If reviewing a diff/PR:** Focus on the changed code, but check that changes don't break existing security properties. Check for new attack surface introduced.
 
 Always read the actual code. Never generate findings based on assumptions about what the code might contain. If you cannot access a file, say so — do not fabricate findings.
+
+## Prior Reports and Delta Reporting
+
+Before analyzing, check the `security-reviews/` directory:
+
+1. **Find the most recent prior security review** (`security-review-*.md`, excluding this run). If none exists, this is a baseline review — state that in one line and proceed normally.
+2. **Read its findings.** You will compare against them when reporting.
+3. **Match on file + vulnerability nature, not exact line numbers** — lines shift as code changes; the same flaw at a moved line is the same finding.
+
+When writing the report, include a "Since Last Review" section (see Output Structure):
+
+- **New:** findings with no match in the prior report
+- **Resolved:** prior findings with no current match — verify the code actually changed before claiming resolution; if you cannot determine why it disappeared, list it as "not re-observed" instead
+- **Persisted:** findings present in both, reported with fresh locations and their original context
+
+A returning reader cares most about what changed; place this section immediately after the Executive Summary.
 
 ## Saving the Report
 
