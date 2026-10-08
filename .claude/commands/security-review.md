@@ -434,4 +434,28 @@ After completing the review, save the report to disk:
 
 1. Create the output directory if it doesn't exist: `security-reviews/`
 2. Write the full security review report to `security-reviews/security-review-YYYY-MM-DD-HHMM.md` using today's date and the current time — the time component prevents same-day reruns from overwriting earlier reports. For scoped reviews, append a short scope slug: `security-review-YYYY-MM-DD-HHMM-auth.md`.
-3. Confirm the file path to the user after saving.
+3. Write a machine-readable summary to `security-reviews/findings-YYYY-MM-DD-HHMM.json` using the same stamp, so tooling can diff and track findings across runs:
+
+```json
+{
+  "report": "security-review-YYYY-MM-DD-HHMM.md",
+  "date": "YYYY-MM-DD",
+  "scope": "what was reviewed",
+  "counts": { "critical": 0, "high": 0, "medium": 0, "low": 0, "informational": 0 },
+  "findings": [
+    {
+      "id": "SR-001",
+      "severity": "critical",
+      "confidence": "confirmed",
+      "title": "short title",
+      "location": "src/app.js:12",
+      "category": "CWE-89",
+      "status": "open"
+    }
+  ]
+}
+```
+
+Use lowercase severity and confidence values. `status` mirrors the triage backlog vocabulary (`open` on first appearance). Omit evidence and remediation prose — this is an index for tooling (CI diffs, dashboards, trend tracking), not a replacement for the report. Never place secret values in the JSON, even redacted fragments beyond the first/last-4 rule.
+
+4. Confirm both file paths to the user after saving.

@@ -41,7 +41,7 @@ Repeat-use value for teams that adopt the skills as a process, not a one-off.
 - [x] **3.1 Delta reporting** — When a prior report exists in `security-reviews/`, produce a "new / resolved / persisted since last review" section instead of a cold-start report.
 - [x] **3.2 Cross-skill integration** — `/security-review` reads the latest threat model (if present) and prioritizes its high-risk components; `/threat-model` reads prior review findings.
 - [x] **3.3 Triage state** — Lightweight `security-reviews/backlog.md` where findings get marked confirmed / false-positive / risk-accepted. The next review reads it and suppresses known-accepted items (avoiding alert fatigue).
-- [ ] **3.4 Machine-readable summary** — `findings.json` (or SARIF) alongside the markdown report, keyed on the stable finding IDs from 1.3.
+- [x] **3.4 Machine-readable summary** — `findings.json` (or SARIF) alongside the markdown report, keyed on the stable finding IDs from 1.3.
 
 ## Phase 4 — Engineering Rigor (the repo itself)
 

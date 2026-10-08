@@ -405,7 +405,7 @@ security-reviews/
   threat-model-2026-03-05-1520.md
 ```
 
-Filenames include a timestamp so same-day reruns don't overwrite earlier reports, and scoped reviews append a short slug (e.g., `security-review-2026-03-05-1430-auth.md`).
+Filenames include a timestamp so same-day reruns don't overwrite earlier reports, and scoped reviews append a short slug (e.g., `security-review-2026-03-05-1430-auth.md`). Each security review also writes `findings-<stamp>.json` — a machine-readable index of finding IDs, severities, confidences, and locations for CI diffs, dashboards, and trend tracking.
 
 ### Ongoing Tracking (Triage Backlog)
 
