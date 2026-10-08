@@ -51,6 +51,14 @@ Produces a STRIDE-based threat model by analyzing the actual codebase — not a 
 | `.claude/commands/security-review.md` | Code-level vulnerability review skill |
 | `.claude/commands/threat-model.md` | Architecture-level threat modeling skill |
 
+### Regression Corpus (this repo only)
+
+| File | Purpose |
+|------|---------|
+| `tests/fixtures/vuln-app/` | Intentionally vulnerable app used to regression-test skill changes (never run it) |
+| `tests/EXPECTED-FINDINGS.md` | Answer key: 36 planted findings, 4 control cases, redaction checks |
+| `tests/score-report.sh` | Smoke-checks a generated report against the manifest |
+
 ### Reference Material (this repo only)
 
 | File | Purpose |

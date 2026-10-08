@@ -1,0 +1,14 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgres://shoplite:p0stgres-sup3rpass@db:5432/shoplite
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: p0stgres-sup3rpass
+    ports:
+      - "5432:5432"

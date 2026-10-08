@@ -29,5 +29,5 @@ This repository contains a **distributable application security review skill** f
 
 - Keep instructions concrete and analytical. "Check for SQL injection" is insufficient — describe what injection looks like across ORMs, raw queries, and template engines.
 - Avoid adding template/report boilerplate. The output format sections should be minimal; the analysis instructions should be comprehensive.
-- Test changes by running `/security-review` against a real project with known vulnerabilities.
+- Test changes by running `/security-review` against the regression corpus: `/security-review Review the application in tests/fixtures/vuln-app/`, then score with `./tests/score-report.sh <report>` and compare against `tests/EXPECTED-FINDINGS.md` (see `tests/README.md` for acceptance criteria). When adding a vulnerability section to the skill, plant a matching finding in the fixture and add it to the manifest.
 - Do not add compliance framework mapping to the security-review skill — that's organizational, not code-level. Keep it in the threat-model skill's regulatory considerations section.
