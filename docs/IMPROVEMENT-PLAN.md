@@ -14,7 +14,7 @@ Fixes an active operational risk and quality gaps introduced when the multi-agen
 
 - [x] **1.1 Secret redaction rule** — When finding evidence contains a secret (API key, password, token), the report must show only first/last 4 characters plus a rotation reminder. The current format instructs Claude to quote vulnerable code verbatim — which copies hardcoded secrets into a committed report file.
 - [x] **1.2 Safe-execution constraints** — Add an explicit rules section: the review is static analysis only. Do not run the application, install or execute scanners, make outbound network requests, or modify code. Limits blast radius from prompt injection in reviewed code.
-- [ ] **1.3 Finding IDs + confidence ratings** — Stable IDs (`SR-001`, `TM-001`) and confidence levels (Confirmed / Likely / Suspected) on every finding. IDs were present in the original `code.md` spec (F1/F2) and dropped in translation; they make findings referenceable across runs and PRs, confidence aids triage.
+- [x] **1.3 Finding IDs + confidence ratings** — Stable IDs (`SR-001`, `TM-001`) and confidence levels (Confirmed / Likely / Suspected) on every finding. IDs were present in the original `code.md` spec (F1/F2) and dropped in translation; they make findings referenceable across runs and PRs, confidence aids triage.
 - [ ] **1.4 Report filename collisions** — `security-review-YYYY-MM-DD.md` silently overwrites on same-day reruns. Add time (`HHMM`) or scope slug to the filename.
 - [ ] **1.5 Verification pass** — Add a final step before reporting: for each finding, confirm the mitigation isn't implemented elsewhere (middleware, framework defaults, upstream validation) and downgrade or drop accordingly. Directly targets the false-positive problem anticipated in INSTALL.md.
 

@@ -82,6 +82,8 @@ Rate each identified threat:
 
 Combine into risk: use the higher value, weighted toward impact for data-sensitive systems.
 
+Assign each threat a stable ID (`TM-001`, `TM-002`, …) and carry it into the report so threats can be referenced across runs, triage, and follow-up reviews.
+
 Consider real-world factors:
 - Is the application internet-facing or internal?
 - What authentication is required to reach the attack surface?
@@ -114,13 +116,13 @@ Consider real-world factors:
 ## Threats
 
 ### Critical/High Risk
-[Only threats rated critical or high — with specific references to code]
+[Only threats rated critical or high — each with an ID (TM-NNN) and specific references to code]
 
 ### Medium Risk
-[Medium-rated threats]
+[Medium-rated threats — each with an ID (TM-NNN)]
 
 ### Low Risk
-[Low-rated threats — brief descriptions sufficient]
+[Low-rated threats — brief descriptions sufficient, still with IDs]
 
 ## Existing Security Controls
 [What's already in place — this matters for accurate risk assessment]

@@ -189,10 +189,11 @@ After finding issues, assess them in context:
 For each finding, provide:
 
 ```
-### [SEVERITY] [SHORT_TITLE]
+### [SR-NNN] [SEVERITY] [SHORT_TITLE]
 
 **Location:** `file/path.ext:LINE`
 **Category:** [OWASP category or CWE]
+**Confidence:** [Confirmed / Likely / Suspected]
 **Exploitability:** [Direct / Requires authentication / Requires chaining / Theoretical]
 
 **Description:**
@@ -207,6 +208,12 @@ For each finding, provide:
 **References:**
 [CWE number, relevant OWASP page, or framework-specific security docs]
 ```
+
+**Identifiers and confidence.** Assign each finding a sequential ID (`SR-001`, `SR-002`, …) so it can be referenced in triage discussions, PR comments, and future reviews. Assign each a confidence rating:
+
+- **Confirmed** — the vulnerable data flow was traced end-to-end from entry point to sink, and no mitigation exists anywhere along the path
+- **Likely** — the pattern is dangerous and reachable, but some intervening context (middleware, framework defaults, configuration) could not be fully verified
+- **Suspected** — a dangerous pattern whose exploitability depends on code or configuration you could not read
 
 **Never reproduce secret values in the report.** Reports are written to disk and frequently committed alongside code. If the vulnerable code contains a hardcoded credential, API key, token, or password, redact it in the evidence — show at most the first and last 4 characters (e.g., `sk-pr…9x2Q`) — and state that the secret is exposed in source and must be rotated. Quoting a secret in full creates a second committed copy of it.
 
