@@ -29,7 +29,7 @@ Fixes an active operational risk and quality gaps introduced when the multi-agen
   - Containers/IaC depth (privileged containers, host mounts, secrets in Terraform state, overly public security groups)
   - LLM-application security (indirect prompt injection, tool/agent authorization, SSRF via URL-fetching agents)
 - [x] **2.2 Reframe dependency & secret scanning honestly** — An LLM reading a lockfile is not real SCA. Instruct the skill to flag outdated/EOL packages as informational and emit recommended scanner commands (`osv-scanner`, `gitleaks`) rather than implying CVE knowledge it doesn't reliably have.
-- [ ] **2.3 Threat model upgrades**:
+- [x] **2.3 Threat model upgrades**:
   - Mermaid data-flow diagram (present in original `threat.md` spec, dropped in translation)
   - Privacy/retention threats (LINDDUN-lite: data minimization, retention, consent) — GDPR-relevant
   - Kill-chain / attack-path detail for the top 2–3 risks only (keeps the "prioritize" rule intact)

@@ -10,7 +10,7 @@ This repository contains a **distributable application security review skill** f
 
 **Distributable skills** (what gets installed into projects):
 - `.claude/commands/security-review.md` — Code-level vulnerability review. Covers OWASP Top 10, injection, auth, access control, SSRF, crypto, config, secrets, path traversal, race conditions, and more. Invoked via `/security-review`.
-- `.claude/commands/threat-model.md` — Architecture-level STRIDE threat model derived from actual code analysis. Invoked via `/threat-model`.
+- `.claude/commands/threat-model.md` — Architecture-level STRIDE threat model derived from actual code analysis, with a mermaid data-flow diagram, a privacy/data-protection pass, and attack paths for top risks. Invoked via `/threat-model`.
 
 **Reference material** (original multi-agent specs these skills were derived from):
 - `AGENT.md` — Security coordinator agent spec

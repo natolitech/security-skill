@@ -323,9 +323,15 @@ Every entry point found in the code with auth requirements and trust boundaries
 ## Trust Boundaries
 Actual boundaries in the architecture
 
+## Data-Flow Diagram
+Mermaid DFD with trust zones and numbered boundary crossings
+
 ## Threats
 Grouped by risk level (Critical/High, Medium, Low)
 Each references specific code components
+
+## Attack Paths
+For the top 2-3 risks: kill chains referencing components and boundary IDs
 
 ## Existing Security Controls
 What's already implemented

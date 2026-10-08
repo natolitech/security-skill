@@ -42,7 +42,7 @@ You can scope it:
 ```
 /threat-model
 ```
-Produces a STRIDE-based threat model by analyzing the actual codebase — not a generic template. Identifies data classifications, trust boundaries, attack surface, and prioritized threats.
+Produces a STRIDE-based threat model by analyzing the actual codebase — not a generic template. Identifies data classifications, trust boundaries, attack surface, privacy and retention risks, and prioritized threats with attack paths for the top risks.
 
 ## What's Included
 
