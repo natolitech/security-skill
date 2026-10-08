@@ -67,16 +67,23 @@ The reference files document the original multi-agent security system these skil
 - Injection (SQL, NoSQL, command, template, LDAP)
 - Broken authentication and session management
 - Broken access control (IDOR, privilege escalation, mass assignment)
+- Cross-site request forgery (CSRF)
+- GraphQL and API-specific issues (BOLA, field-level authorization, batching abuse)
 - Cryptographic failures
 - Server-side request forgery (SSRF)
 - Cross-site scripting (XSS)
+- Frontend-specific issues (postMessage origins, token storage, source maps)
 - Insecure deserialization and prototype pollution
 - Security misconfiguration (CORS, CSP, debug mode, headers)
+- Containers and infrastructure as code (Docker, Kubernetes, Terraform, CI/CD)
 - Vulnerable dependencies
 - Path traversal
+- File upload handling
 - Race conditions
+- Business logic abuse
 - Open redirect
 - Logging/secrets hygiene
+- LLM-application security (prompt injection, agent authorization)
 
 ## Design Principles
 

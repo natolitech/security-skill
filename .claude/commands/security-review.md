@@ -29,6 +29,7 @@ Before analyzing code, understand the system:
    - CLI argument parsing
    - Environment variable usage
    - Scheduled jobs that process external data
+   - LLM/agent integrations (model API clients, agent frameworks, RAG pipelines)
 
 3. **Identify sensitive operations** — Find where the application:
    - Authenticates users (login, token creation/validation, OAuth flows)
@@ -87,6 +88,29 @@ What to look for:
 - **Mass assignment / over-posting**: Can users set fields they shouldn't? `User.update(req.body)` where `req.body` includes `role: "admin"`. Check for unfiltered object spread into database updates.
 - **Function-level access control**: Are all CRUD operations authorized, not just reads? Can an unauthorized user DELETE or PUT?
 
+#### Cross-Site Request Forgery (CSRF)
+
+What to look for:
+- State-changing endpoints (POST/PUT/DELETE) without CSRF protection: missing CSRF middleware (`csurf`, Django `CsrfViewMiddleware`, Rails `protect_from_forgery`, Spring's CSRF filter)
+- Reliance on SameSite cookies alone: `SameSite=Lax` blocks cross-site POSTs but not top-level GET navigations — and older browsers may not enforce it at all
+- State-changing GET endpoints: actions triggered by links (approve, delete, transfer, unsubscribe) are CSRFable even with Lax cookies, and leak action URLs via Referer
+- Token validation flaws: token not tied to the session, token accepted from a query parameter or attacker-readable cookie, validation skipped on specific routes
+- Cookie misconfiguration: `SameSite=None` without a real cross-site need, missing `Secure`, or no SameSite attribute
+- Content-type assumptions: treating `application/json` endpoints as CSRF-safe when they also accept form-encoded or `text/plain` bodies, or when they parse JSON regardless of content type
+- Login CSRF: can an attacker forge a login that logs the victim into the attacker's account? Login and password-reset flows need CSRF protection too
+
+#### GraphQL and API-Specific Issues
+
+What to look for:
+- Missing field-level authorization: resolvers returning data without checking the requesting user's right to that specific field — every resolver needs its own authz check; a single check at the query entry is not enough
+- BOLA (Broken Object Level Authorization): queries/mutations taking IDs (`getUser(id: 123)`) without ownership validation — same class as IDOR but frequently missed because the ID is in the query body, not the URL
+- Introspection or GraphiQL/playground enabled in production
+- Batching and aliasing abuse: mutations accepting arrays (`createUsers(input: [...])`) or aliased repeats with no batch-size limit or rate limiting — brute force and enumeration in a single request
+- Unbounded query depth/cost: deeply nested queries causing DoS; no complexity or depth limits
+- Client-supplied filters/sorts mapped directly into ORM or database queries (`where`, `orderBy` arguments passed through) — injection and mass assignment adjacent
+- Arbitrary query strings accepted from clients in production (persisted queries disabled)
+- REST equivalents: bulk endpoints without per-item authorization; old API versions with weaker checks left exposed (`/api/v1/` alongside `/api/v2/`)
+
 #### Cryptographic Failures
 
 What to look for:
@@ -114,6 +138,17 @@ What to look for:
 - Stored XSS: User content saved to DB and rendered without sanitization
 - Missing or misconfigured Content Security Policy
 
+#### Frontend-Specific Issues
+
+What to look for:
+- `postMessage` handlers without origin checks: `window.addEventListener('message', ...)` acting on `event.data` without verifying `event.origin` against an allowlist
+- Tokens in `localStorage`/`sessionStorage`: any XSS can read them — prefer memory or httpOnly cookies; refresh tokens in localStorage are worse still
+- Production source maps published (`.map` files accessible in deployments), exposing original source, comments, and sometimes internal URLs and keys
+- Secrets in the bundle: API keys or PII baked into build-time public environment variables (`NEXT_PUBLIC_*`, `VITE_*` used for secret values)
+- `target="_blank"` without `rel="noopener noreferrer"` on user-controlled or external links (reverse tabnabbing)
+- Client-side-only enforcement as the sole authorization: UI hiding of buttons/routes calling unauthenticated API variants
+- Service workers caching authenticated responses, or fetch handlers relaying data cross-origin
+
 #### Insecure Deserialization
 
 What to look for:
@@ -132,6 +167,18 @@ What to look for:
 - Unnecessary features enabled: directory listing, unused HTTP methods, admin interfaces exposed
 - Docker running as root, overly permissive IAM roles, public S3 buckets
 
+#### Containers and Infrastructure as Code
+
+What to look for:
+- Containers running as root (no `USER` directive in Dockerfile), `privileged: true`, or broad `cap-add`
+- Dangerous mounts: Docker socket (`/var/run/docker.sock`) inside a container (container escape), host root (`/`) mounts
+- Secrets baked into images: `COPY .env`, credentials via `ARG`/`ENV` (retained in image history), docker-compose files with inline passwords
+- Terraform/CDK/Pulumi state containing plaintext secrets (state files store secret values even when marked sensitive) — check the backend configuration, and whether state files are committed to git despite `.gitignore`
+- Overly open network rules: `0.0.0.0/0` ingress on SSH (22), databases (3306, 5432, 27017, 6379), or admin ports in security groups / firewall definitions
+- Public or unencrypted storage buckets; disabled versioning on state buckets
+- Kubernetes: `runAsRoot`/missing `runAsNonRoot`, `hostNetwork`, `hostPath` mounts, `allowPrivilegeEscalation: true`, broad `cluster-admin` RBAC bindings, plain `Secret` manifests committed to git
+- CI/CD: `pull_request_target` workflows checking out untrusted PR code with repo secrets in scope, secrets exported to fork-accessible jobs
+
 #### Vulnerable Dependencies
 
 What to look for:
@@ -146,6 +193,18 @@ What to look for:
 - Insufficient sanitization: Only checking for `../` but not URL-encoded variants (`%2e%2e%2f`), double encoding, or null bytes
 - Archive extraction without path validation (zip slip)
 
+#### File Upload Handling
+
+What to look for:
+- Content-type validation trusting the client: checking the `Content-Type` header or file extension alone instead of magic bytes/content sniffing
+- No extension allowlist (or a denylist that misses `.php`, `.phtml`, `.jsp`, `.asp`, `.aspx`, `.exe`, `.html`, `.svg`)
+- Uploaded files served back from the same origin: stored XSS via HTML/SVG uploads (SVG can contain scripts); attacker-controlled `Content-Type` on served files; missing `Content-Disposition: attachment` or `X-Content-Type-Options: nosniff`
+- No size limits: unbounded uploads exhausting disk/memory; archive decompression bombs
+- Storage placement: uploads inside the web root or served directly by the app server; predictable filenames allowing overwrites of other users' files
+- Unsanitized original filenames used in storage paths or later in shell commands/renders (overlaps with Path Traversal)
+- Image processing on untrusted files: ImageMagick without a security policy (`policy.xml`), outdated image libraries
+- Validation gaps between upload and retrieval: files validated on ingest but re-served or reprocessed without checks
+
 #### Race Conditions
 
 What to look for:
@@ -153,6 +212,19 @@ What to look for:
 - File operations: checking existence then creating/reading (TOCTOU)
 - Non-atomic database operations that should be transactional
 - Concurrent request handling that could double-spend, double-vote, or double-redeem
+
+#### Business Logic Abuse
+
+Read the code as an attacker misusing valid functionality — these flaws don't match vulnerability patterns, only business rules:
+
+What to look for:
+- Money/math errors: negative or zero quantities, integer overflow on price × quantity, floating-point currency math, client-supplied prices or totals accepted instead of server-side computation
+- Workflow step skipping: can step 3 of a checkout/verification flow be invoked directly without steps 1–2? Are state transitions validated server-side?
+- Coupon, referral, and reward reuse: single-use codes redeemable concurrently (races), self-referral, redemption not bound to an account or order
+- Predictable redeemable values: sequential gift card numbers, guessable discount codes or invoice IDs
+- Cancellation/refund abuse: refunds without goods returned, double refunds, refunding more than paid, canceling after the benefit is consumed
+- Trusting client-computed values verbatim: totals, discounts, tax, shipping, currency, tax-exemption status
+- Testing/beta endpoints left enabled in production: debug pricing, seed-data routes, admin simulation
 
 #### Open Redirect
 
@@ -174,6 +246,20 @@ What to look for:
 - Secrets in committed files: `.env` files in git, config files with credentials, `docker-compose.yml` with inline passwords
 - Secrets in client-side code: API keys in frontend JavaScript bundles
 - Insufficient secret rotation: No mechanism to rotate keys without redeployment
+
+#### LLM-Application Security
+
+Only if the application integrates LLMs or AI features (model API clients, agent frameworks, RAG pipelines, chat interfaces). If it doesn't, skip this section.
+
+What to look for:
+- Indirect prompt injection: untrusted content (fetched web pages, emails, documents, uploaded files, RAG corpus data, tool outputs) flowing into prompts with the same trust as instructions — can that content cause the system to take actions the user didn't intend?
+- Agent/tool authorization: what can the agent do on behalf of a user? Tools that send emails, transfer money, modify records, or fetch URLs act with the system's privileges, not the content author's — check per-tool authorization and human-in-the-loop for irreversible actions
+- SSRF via agents: tools that fetch URLs with model-controlled destinations — same risks as SSRF (cloud metadata, internal hosts), typically with no URL allowlist
+- Secrets and PII in prompts: API keys, connection strings, or user data sent to third-party model APIs — check what is logged, cached, and retained by the integration
+- Cross-tenant leakage through retrieval: embeddings/retrieval without tenant scoping carrying one tenant's data into another user's answers
+- Model output used dangerously: generated content passed to `eval`, SQL, shell, HTML rendering, or parsed into privileged objects without validation
+- Security decisions delegated to the model: authorization or content-safety judgments that should be deterministic code
+- Unbounded agent loops: auto-retry and tool loops triggerable by injected instructions (denial of wallet)
 
 ### Step 3: Contextual Threat Assessment
 

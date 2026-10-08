@@ -20,7 +20,7 @@ Fixes an active operational risk and quality gaps introduced when the multi-agen
 
 ## Phase 2 — Coverage Expansion
 
-- [ ] **2.1 Add missing vulnerability sections** to `/security-review`:
+- [x] **2.1 Add missing vulnerability sections** to `/security-review`:
   - CSRF (token validation, SameSite-only reliance, state-changing GETs) — currently only referenced in the severity table with no analysis guidance
   - File upload handling (content-type validation vs. magic bytes, size limits, storage location, SVG-XSS, executable upload)
   - GraphQL/API-specific (field-level authorization, introspection in production, BOLA, batching/aliasing abuse)
