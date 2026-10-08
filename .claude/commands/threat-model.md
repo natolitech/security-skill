@@ -27,6 +27,8 @@ Read the codebase to determine:
    - **Public:** Intentionally public content
 4. **Where does data flow?** — Trace from user input through processing to storage and output. Identify every trust boundary crossing (browser→API, API→database, service→service, service→external API).
 
+5. **Check for prior security reviews** — If `security-reviews/` contains security review reports (`security-review-*.md`), read the most recent. Treat its findings as evidence: confirmed findings indicate missing controls (raise those threats' likelihood), while areas with clean results and positive observations indicate implemented controls (feed the Existing Security Controls section).
+
 ### Step 2: Map Attack Surface
 
 Identify concrete entry points by reading route definitions, API schemas, and integration code:

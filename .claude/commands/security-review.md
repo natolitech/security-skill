@@ -52,6 +52,8 @@ Before analyzing code, understand the system:
    - CI/CD pipeline configuration for security gates
    - `.env.example` or config templates for secrets handling patterns
 
+5. **Check for a prior threat model** — If `security-reviews/` contains a threat model (`threat-model-*.md`), read the most recent one and its highest-risk threats and attack paths. Prioritize reviewing the components and boundary crossings it flags (for example, authentication flows or entry points it rates critical/high). This is a prioritization input, not a scope restriction — critical findings elsewhere are still reported.
+
 ### Step 2: Vulnerability Analysis
 
 For each entry point and sensitive operation found, systematically check for the following. Do NOT use a generic checklist — analyze the actual code paths.
