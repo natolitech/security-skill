@@ -392,9 +392,11 @@ Both skills automatically save their output to a `security-reviews/` directory i
 
 ```
 security-reviews/
-  security-review-2026-03-05.md
-  threat-model-2026-03-05.md
+  security-review-2026-03-05-1430.md
+  threat-model-2026-03-05-1520.md
 ```
+
+Filenames include a timestamp so same-day reruns don't overwrite earlier reports, and scoped reviews append a short slug (e.g., `security-review-2026-03-05-1430-auth.md`).
 
 You can commit these alongside your release notes or keep them for audit records.
 

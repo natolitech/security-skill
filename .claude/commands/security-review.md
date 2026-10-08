@@ -286,5 +286,5 @@ Always read the actual code. Never generate findings based on assumptions about 
 After completing the review, save the report to disk:
 
 1. Create the output directory if it doesn't exist: `security-reviews/`
-2. Write the full security review report to `security-reviews/security-review-YYYY-MM-DD.md` using today's date.
+2. Write the full security review report to `security-reviews/security-review-YYYY-MM-DD-HHMM.md` using today's date and the current time — the time component prevents same-day reruns from overwriting earlier reports. For scoped reviews, append a short scope slug: `security-review-YYYY-MM-DD-HHMM-auth.md`.
 3. Confirm the file path to the user after saving.

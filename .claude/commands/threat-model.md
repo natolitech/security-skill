@@ -147,5 +147,5 @@ Consider real-world factors:
 After completing the threat model, save the report to disk:
 
 1. Create the output directory if it doesn't exist: `security-reviews/`
-2. Write the full threat model report to `security-reviews/threat-model-YYYY-MM-DD.md` using today's date.
+2. Write the full threat model report to `security-reviews/threat-model-YYYY-MM-DD-HHMM.md` using today's date and the current time — the time component prevents same-day reruns from overwriting earlier reports. For scoped models, append a short scope slug: `threat-model-YYYY-MM-DD-HHMM-payments.md`.
 3. Confirm the file path to the user after saving.
