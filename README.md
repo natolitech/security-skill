@@ -26,6 +26,7 @@ ln -s /path/to/security-skill/.claude/commands/threat-model.md .claude/commands/
 In Claude Code, invoke the skills with slash commands:
 
 ### Full Security Review
+
 ```
 /security-review
 ```
@@ -39,10 +40,15 @@ You can scope it:
 ```
 
 ### Threat Model
+
 ```
 /threat-model
 ```
 Produces a STRIDE-based threat model by analyzing the actual codebase — not a generic template. Identifies data classifications, trust boundaries, attack surface, privacy and retention risks, and prioritized threats with attack paths for the top risks.
+
+### Saved Output
+
+Both commands write to a `security-reviews/` directory in your project: timestamped markdown reports, a machine-readable `findings-*.json` index from `/security-review` (for CI diffs and trend tracking), and a triage `backlog.md` that suppresses known false-positives and risk-accepted items on repeat runs. Repeat reviews include a "Since Last Review" delta section, and each skill reads the other's prior output to focus its analysis. See [INSTALL.md](INSTALL.md) for details.
 
 ## What's Included
 
@@ -50,6 +56,7 @@ Produces a STRIDE-based threat model by analyzing the actual codebase — not a 
 |------|---------|
 | `.claude/commands/security-review.md` | Code-level vulnerability review skill |
 | `.claude/commands/threat-model.md` | Architecture-level threat modeling skill |
+| `install.sh` | One-command installer for the two skills (see INSTALL.md Method 4) |
 
 ### Regression Corpus (this repo only)
 

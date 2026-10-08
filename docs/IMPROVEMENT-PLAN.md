@@ -1,7 +1,7 @@
 # Security Skill Improvement Plan
 
 **Created:** 2026-10-08
-**Status:** Approved — all phases
+**Status:** Complete — all phases delivered (2026-10-08)
 **Owner:** Security engineering
 
 This plan upgrades the distributable security skills (`.claude/commands/security-review.md` and `.claude/commands/threat-model.md`) across four phases: safety/correctness fixes, coverage expansion, workflow integration, and engineering rigor for the repo itself.
@@ -47,7 +47,7 @@ Repeat-use value for teams that adopt the skills as a process, not a one-off.
 
 - [x] **4.1 Vulnerable fixture corpus** — `tests/fixtures/vuln-app/` with planted, known findings + an expected-findings manifest. CLAUDE.md already calls for testing "against a project with known vulnerabilities" — this builds it. Highest-leverage investment: makes skill edits regression-testable.
 - [x] **4.2 Version headers** — Each command gets a `<!-- skill-version: N.N -->` header plus changelog section, so copy-installed consumers (INSTALL.md Method 1 — permanently pinned files) can tell what they're running.
-- [ ] **4.3 Ship the installer** — INSTALL.md Method 4 shows an inline script; add the actual `install.sh` to the repo. Also sync README (doesn't mention the `security-reviews/` output directory) and add a markdown-lint CI check.
+- [x] **4.3 Ship the installer** — INSTALL.md Method 4 shows an inline script; add the actual `install.sh` to the repo. Also sync README (doesn't mention the `security-reviews/` output directory) and add a markdown-lint CI check.
 
 ---
 

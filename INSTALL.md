@@ -125,28 +125,18 @@ git commit -m "Update security review skills"
 
 Best for: scripted setup across many projects or CI environments.
 
-Create this script or run it directly:
+The repo ships an installer. Run it from the security-skill root, pointing at your project:
 
 ```bash
-#!/bin/bash
-# install-security-skills.sh
-# Usage: ./install-security-skills.sh [project-dir] [security-skill-dir]
+./install.sh /path/to/your-project
+```
 
-PROJECT_DIR="${1:-.}"
-SKILL_DIR="${2:-$HOME/tools/security-skill}"
+Or install into the current directory with no argument. The installer validates that both skill files exist in the source repo, copies them into `.claude/commands/`, and prints the installed skill versions.
 
-if [ ! -d "$SKILL_DIR/.claude/commands" ]; then
-  echo "Error: Security skill not found at $SKILL_DIR"
-  echo "Clone it first: git clone <repo-url> $SKILL_DIR"
-  exit 1
-fi
+If you keep the repo in a shared location, invoke it from anywhere:
 
-mkdir -p "$PROJECT_DIR/.claude/commands"
-cp "$SKILL_DIR/.claude/commands/security-review.md" "$PROJECT_DIR/.claude/commands/"
-cp "$SKILL_DIR/.claude/commands/threat-model.md" "$PROJECT_DIR/.claude/commands/"
-
-echo "Security skills installed to $PROJECT_DIR/.claude/commands/"
-echo "Available commands: /security-review, /threat-model"
+```bash
+~/tools/security-skill/install.sh /path/to/your-project
 ```
 
 ---
@@ -618,4 +608,12 @@ git commit -m "Update security review skills"
 
 ### If installed via script (Method 4)
 
-Re-run the installer script after pulling updates to the source repo.
+Re-run the installer after pulling updates to the source repo:
+
+```bash
+cd /path/to/security-skill
+git pull
+./install.sh /path/to/your-project
+```
+
+The installer prints the versions it installed so you can confirm the update took.
