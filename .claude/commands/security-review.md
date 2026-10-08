@@ -184,7 +184,18 @@ After finding issues, assess them in context:
 - **Is it exploitable?** A theoretical vulnerability behind multiple guards is less urgent than one that's directly reachable. But don't dismiss defense-in-depth failures.
 - **What's the attack chain?** Sometimes low-severity issues combine. An information disclosure + IDOR + missing rate limiting = account takeover.
 
-### Step 4: Report Findings
+### Step 4: Verification Pass
+
+Before writing the report, verify every finding against the codebase:
+
+1. **Hunt for the mitigation.** For each finding, search for controls that may already neutralize it: router-level authentication/authorization middleware, input validation in a base controller or schema layer, ORM parameterization, framework security defaults, CSP or WAF rules in configuration. A dangerous pattern with a verified upstream guard is a defense-in-depth note (Informational), not a vulnerability.
+2. **Re-trace the data flow.** Confirm the untrusted input actually reaches the sink unvalidated. If sanitization or encoding happens anywhere en route, downgrade or drop the finding.
+3. **Re-check severity context.** Is the endpoint reachable without authentication? What data is actually at risk? Adjust severity to verified reality rather than the worst case.
+4. **Downgrade confidence rather than deleting uncertainty.** If a potential mitigation cannot be verified, keep the finding, mark it Suspected, and state exactly what could not be verified.
+
+Findings that survive this pass unchanged are Confirmed. Softened findings keep their ID with downgraded confidence or severity. Refuted findings are removed entirely — do not report them "just in case." False positives erode trust in real findings.
+
+### Step 5: Report Findings
 
 For each finding, provide:
 

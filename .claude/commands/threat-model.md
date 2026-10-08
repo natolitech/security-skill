@@ -139,6 +139,7 @@ Consider real-world factors:
 - **Read the code.** Do not produce a generic threat model. Every threat must reference actual components, endpoints, or data flows found in the codebase.
 - **Skip what doesn't apply.** If the system doesn't handle file uploads, don't list file upload threats. If there's no admin interface, don't model admin privilege escalation.
 - **Prioritize.** A threat model with 50 items is useless. Focus on the threats that matter most given this system's specific architecture and data sensitivity.
+- **Verify before rating.** For each threat, actively search the code for existing controls that address it before assigning likelihood. Rate the system as implemented, not as typically built.
 - **Acknowledge unknowns.** If you can't determine something from the code (e.g., infrastructure configuration, WAF rules, network segmentation), say so rather than assuming.
 - **Never reproduce secret values in the report.** Reports are saved to disk and often committed. If a data store, config, or code reference contains actual credentials or keys, show at most the first and last 4 characters and note that rotation is required.
 
