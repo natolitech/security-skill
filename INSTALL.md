@@ -207,6 +207,14 @@ Claude will:
 /security-review Review src/controllers/payment.ts and src/services/stripe.ts
 ```
 
+**Remote repository review:**
+
+```
+/security-review https://github.com/org/target-repo
+```
+
+Claude shallow-clones the repository into a temporary directory outside your project (`git clone --depth 1`, honoring a branch/tag if the URL names one), reviews the clone there, and writes the report to your project's `security-reviews/` directory as `security-review-YYYY-MM-DD-HHMM-<repo>.md` — with the repo URL and exact commit hash recorded in the report scope. Because the clone is shallow, history-dependent checks (secrets committed in the past) are noted as out of scope. Prior-report deltas and the triage backlog apply only to reviews of the same repository, so local findings are never mixed with remote ones.
+
 ### Running a Threat Model
 
 The `/threat-model` command produces an architecture-level STRIDE analysis by reading your codebase.
@@ -236,6 +244,14 @@ Claude will:
 /threat-model Model threats for the new webhook integration
 ```
 
+**Remote repository threat model:**
+
+```
+/threat-model https://github.com/org/target-repo
+```
+
+Same mechanism as `/security-review`: shallow clone into a temp directory, model the clone, save the report as `threat-model-YYYY-MM-DD-HHMM-<repo>.md` with the URL and reviewed commit recorded.
+
 ### Scoping Your Review
 
 | You Want | Command |
@@ -248,6 +264,8 @@ Claude will:
 | Architecture threat model | `/threat-model` |
 | Threat model a specific feature | `/threat-model Focus on the file upload feature` |
 | Quick check on a single file | `/security-review Review src/routes/admin.ts` |
+| Review a remote repository | `/security-review https://github.com/org/repo` |
+| Threat model a remote repository | `/threat-model https://github.com/org/repo` |
 
 ---
 
@@ -509,6 +527,8 @@ For this project, verify the following [HIPAA/PCI-DSS/etc.] requirements:
 
 If certain vulnerability classes aren't relevant (e.g., SSRF in a purely client-side project), you can remove those sections to reduce noise. However, keep them if there's any server-side component — they're there because they're commonly overlooked.
 
+If your customizations are generally useful, consider contributing them back upstream — see [CONTRIBUTING.md](CONTRIBUTING.md). The skills are MIT-licensed, so this is a request, not an obligation.
+
 ---
 
 ## Troubleshooting
@@ -567,6 +587,20 @@ Security reviews will sometimes flag code that's actually safe. This is expected
 - Check whether the mitigation is elsewhere (e.g., validation happens in middleware, not in the flagged function)
 - The finding may still be worth noting as defense-in-depth — if the upstream control is removed later, the code becomes vulnerable
 - Use the finding to add a code comment explaining why the pattern is safe in this context
+
+### Remote repository review fails
+
+`/security-review https://github.com/org/repo` shallow-clones the target with `git clone --depth 1`. If the clone fails, the skill stops and says so — it will not fabricate findings. Common causes and the workaround:
+
+1. **Private repository** — the skill has no credentials of its own. Clone manually with your credentials, then point the skill at the local copy:
+   ```bash
+   git clone git@github.com:org/repo.git /tmp/repo
+   ```
+   ```
+   /security-review Review the application in /tmp/repo
+   ```
+2. **Specific commit or full history needed** — shallow clones have no git history (history-dependent secret checks are reported as out of scope). Clone manually without `--depth 1`, check out the ref you need, and review that directory as above.
+3. **Unreachable host** — same fallback: obtain the code by whatever means work in your environment, then review it by local path.
 
 ---
 

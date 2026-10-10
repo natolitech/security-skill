@@ -1,7 +1,7 @@
 # Security Skill Improvement Plan
 
 **Created:** 2026-10-08
-**Status:** Complete — all phases delivered (2026-10-08)
+**Status:** Complete — all phases delivered (2026-10-08); Phase 5 addendum delivered 2026-10-09
 **Owner:** Security engineering
 
 This plan upgrades the distributable security skills (`.claude/commands/security-review.md` and `.claude/commands/threat-model.md`) across four phases: safety/correctness fixes, coverage expansion, workflow integration, and engineering rigor for the repo itself.
@@ -48,6 +48,20 @@ Repeat-use value for teams that adopt the skills as a process, not a one-off.
 - [x] **4.1 Vulnerable fixture corpus** — `tests/fixtures/vuln-app/` with planted, known findings + an expected-findings manifest. CLAUDE.md already calls for testing "against a project with known vulnerabilities" — this builds it. Highest-leverage investment: makes skill edits regression-testable.
 - [x] **4.2 Version headers** — Each command gets a `<!-- skill-version: N.N -->` header plus changelog section, so copy-installed consumers (INSTALL.md Method 1 — permanently pinned files) can tell what they're running.
 - [x] **4.3 Ship the installer** — INSTALL.md Method 4 shows an inline script; add the actual `install.sh` to the repo. Also sync README (doesn't mention the `security-reviews/` output directory) and add a markdown-lint CI check.
+
+---
+
+## Phase 5 — Remote Repository Targets & Licensing (2026-10-09)
+
+Post-plan addendum, delivered on request.
+
+- [x] **5.1 Git URL as review target** — both skills accept a repository URL argument (e.g., `/security-review https://github.com/org/repo`). The target is shallow-cloned (`git clone --depth 1`, `--branch <ref>` if the URL names one) into a temp directory outside the invoking project, and reviewed/modeled in place. Report is pinned to URL + commit hash (`git rev-parse HEAD`) and saved with the repo name as scope slug.
+- [x] **5.2 Rules of Engagement carve-outs** — cloning the user-designated target is the single permitted network operation; clone writes outside the project don't violate the no-modification rule. Reviewed code remains untrusted data.
+- [x] **5.3 Cross-target isolation** — delta comparison restricted to prior reports covering the same target; triage backlog neither applied nor updated for remote targets (path collisions); threat-model prior-review evidence restricted to the same repository.
+- [x] **5.4 Honest-limits behavior** — shallow clone excludes git history, so history-dependent checks (secrets committed in the past) are stated as out of scope in the report; clone failure stops the run instead of fabricating findings; the clone is left in place and its path reported.
+- [x] **5.5 Licensing for organizational reuse** — repo licensed MIT (LICENSE) with a non-binding contribution request (CONTRIBUTING.md, README License section); `license: MIT` added to both skill headers and Version sections so the grant and the upstream request travel with every copied file.
+
+Skills bumped to v2.1.0.
 
 ---
 

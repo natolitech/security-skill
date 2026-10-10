@@ -39,12 +39,24 @@ You can scope it:
 /security-review Review only the changes in this PR
 ```
 
+You can also point it at a remote repository:
+```
+/security-review https://github.com/org/target-repo
+```
+The skill shallow-clones the repo (`git clone --depth 1`) into a temporary directory outside your project, analyzes the clone there, and saves the report to your project's `security-reviews/` directory with the repo name as the scope slug. Findings are pinned to the URL plus the exact commit hash reviewed. A shallow clone has no git history, so history-dependent checks (secrets committed in the past) are flagged as out of scope. If the clone fails — a private repo you don't have credentials for, for example — the skill says so and stops rather than guessing.
+
 ### Threat Model
 
 ```
 /threat-model
 ```
 Produces a STRIDE-based threat model by analyzing the actual codebase — not a generic template. Identifies data classifications, trust boundaries, attack surface, privacy and retention risks, and prioritized threats with attack paths for the top risks.
+
+Accepts a remote repository URL the same way:
+```
+/threat-model https://github.com/org/target-repo
+```
+The repo is shallow-cloned into a temp directory and modeled there; the report header records the URL and the exact commit reviewed.
 
 ### Saved Output
 
@@ -60,6 +72,7 @@ See [INSTALL.md](INSTALL.md) for full usage details, and [examples/](examples/) 
 | `.claude/commands/threat-model.md` | Architecture-level threat modeling skill |
 | `install.sh` | One-command installer for the two skills (see INSTALL.md Method 4) |
 | `examples/` | Real end-to-end outputs from both skills, with walkthroughs |
+| `CONTRIBUTING.md` | How to contribute improvements back upstream |
 
 ### Regression Corpus (this repo only)
 
@@ -112,3 +125,9 @@ These skills were built to address common failures in AI-assisted security revie
 3. **Stack-agnostic, stack-aware.** Works on any language/framework but knows what to look for in each.
 4. **Actionable output.** Every finding includes the vulnerable code and a concrete remediation pattern.
 5. **Acknowledge limits.** The skill instructs Claude to flag what it can't determine rather than fabricate findings.
+
+## License
+
+MIT — see [LICENSE](LICENSE). Any organization is free to use, copy, and modify the skills, including commercially, with no obligation to share changes back.
+
+**A request, not a requirement:** if you improve the skills — new vulnerability coverage, better remediation patterns, fewer false positives — please contribute the changes back via a pull request to [github.com/natolitech/security-skill](https://github.com/natolitech/security-skill) so every user benefits. The regression corpus in `tests/` makes it safe to verify that changes don't lose coverage. See [CONTRIBUTING.md](CONTRIBUTING.md).

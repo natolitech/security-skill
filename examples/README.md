@@ -8,8 +8,10 @@ Real, end-to-end examples of using the two skills. Both example outputs were pro
 /security-review                                                    # whole project
 /security-review Review the authentication module in src/auth/      # scoped to a directory
 /security-review Review the changes on this branch for security issues   # scoped to a diff/PR
+/security-review https://github.com/org/target-repo                 # remote repository (shallow-cloned)
 /threat-model                                                       # whole system
 /threat-model Focus on the payment processing subsystem             # scoped to a feature
+/threat-model https://github.com/org/target-repo                    # remote repository (shallow-cloned)
 ```
 
 Full invocation reference: [../README.md](../README.md) and [../INSTALL.md](../INSTALL.md).
