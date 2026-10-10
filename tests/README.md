@@ -38,8 +38,24 @@ The corpus in `fixtures/vuln-app/` is an intentionally vulnerable application (S
 | Date | Run | Result |
 |------|-----|--------|
 | 2026-10-08 | Fresh-session review (no fixture knowledge), skill v2.0.0 | **35/36 planted findings (97.2%)**, 0/4 control false-positives, redaction PASS. Miss: VF-27 open redirect on `/login?next=`. Band deviations: VF-03/VF-09 downgraded with correct dead-code justification (verification pass working as designed); VF-10 JWT algorithm pinning folded into a Low finding; VF-34 DEBUG rated Informational. Bonus legitimate findings: missing security headers, no lockfile, 50 MB body limit, 30-day JWTs. |
+| 2026-10-10 | Fresh-session review, skill v2.1.0 | **36/36 planted findings (100%)**, 0/4 control false-positives, redaction PASS, scorer 100% keyword coverage. Contamination note: reviewer had read `tests/README.md` (which names VF-27's location) but not `EXPECTED-FINDINGS.md` or the fixture source before reviewing — treat VF-27 as confirmed-with-prior-hint. Band deviations: VF-03 Critical→Medium and VF-09 High→Medium (dead-code verification, no caller — consistent with the v2.0.0 baseline's treatment); VF-10 High→Medium, VF-15 High→Critical (unauth mass-data justification), VF-20 High→Medium, VF-28/VF-32 Medium→High. Bonus legitimate findings: unhandled token-verify throw on `/api/profile`, AI tool-result logging, GraphQL cost controls, Terraform unpinned, inbox-to-OpenAI privacy note. |
 
 Notes for future skill work: open redirect on query-parameter redirects is a known miss — check the Open Redirect guidance if regressing. The keyword scorer counted VF-27 as covered via unrelated "redirect" mentions in SSRF/CSRF findings; always confirm misses manually.
+
+## Potential Additional Corpora
+
+The fixture covers one stack (Node/Express/Postgres). Candidates for broader regression coverage — usable directly with the remote-repo feature (`/security-review <url>`) — ranked by fit:
+
+| Corpus | Stack | Why |
+|--------|-------|-----|
+| [OWASP NodeGoat](https://github.com/OWASP/NodeGoat) | Node/Express/MongoDB | Same ecosystem as the fixture, different DB and auth patterns; OWASP-maintained with documented per-exercise solutions |
+| [OWASP Juice Shop](https://github.com/juice-shop/juice-shop) | Node/TypeScript/Angular | Largest challenge set (~100+), modern frontend — good for frontend-section coverage; scope to `routes/` + `frontend/src/app/` per run, it's big |
+| [OWASP WebGoat](https://github.com/WebGoat/WebGoat) | Java/Spring | Covers the Java/Spring guidance the fixture can't exercise |
+| [RailsGoat](https://github.com/OWASP/railsgoat) | Ruby on Rails | Rails-specific ORM/authz patterns (strong params, Devise, CanCan) |
+| [OWASP Benchmark](https://github.com/OWASP/Benchmark) | Java | Designed for scored SAST precision/recall — only if we want quantitative metrics; findings are per-test-case, not app-realistic |
+| [DVWA](https://github.com/digininja/DVWA) | PHP/MySQL | Legacy-stack coverage; low priority unless PHP usage matters |
+
+Ground rules if adopted: read-only analysis (RoE still forbids running them), build an `EXPECTED-FINDINGS.md` equivalent from the project's own documentation before first run, and score severity bands the same way.
 
 ## Notes
 
