@@ -1,6 +1,6 @@
 # Examples
 
-Real, end-to-end examples of using the two skills. Both example outputs were produced by executing the skills (v2.0.0) against `tests/fixtures/vuln-app/` — an intentionally vulnerable demo store ("ShopLite") — with no foreknowledge of the planted issues. Nothing here is mocked or hand-written.
+Real, end-to-end examples of using the two skills. The fixture examples were produced by executing the skills (v2.1.0) against `tests/fixtures/vuln-app/` — an intentionally vulnerable demo store ("ShopLite") — with no foreknowledge of the planted issues. The remote example was produced by executing `/security-review` (v2.1.0) against a live public repository. Nothing here is mocked or hand-written.
 
 ## The Commands
 
@@ -20,10 +20,11 @@ Full invocation reference: [../README.md](../README.md) and [../INSTALL.md](../I
 
 | File | What it shows |
 |------|---------------|
-| [`security-review-report-example.md`](security-review-report-example.md) | Complete `/security-review` output: 31 findings, executive summary, "Since Last Review" slot, severity/confidence-rated findings with evidence and remediation, positive observations, recommendations |
+| [`security-review-report-example.md`](security-review-report-example.md) | Complete `/security-review` output: 42 findings, executive summary, "Since Last Review" slot, severity/confidence-rated findings with evidence and remediation, positive observations, recommendations |
 | [`findings-example.json`](findings-example.json) | The machine-readable index written alongside every review — finding IDs, severities, locations, triage statuses — for CI diffs and trend tracking |
-| [`threat-model-example.md`](threat-model-example.md) | Complete `/threat-model` output: data classification, attack surface table, mermaid data-flow diagram with numbered boundary crossings, STRIDE threats (TM-NNN), privacy pass, attack paths for top risks |
+| [`threat-model-example.md`](threat-model-example.md) | Complete `/threat-model` output: data classification, attack surface table, mermaid data-flow diagram with numbered boundary crossings, STRIDE + privacy threats (TM-NNN), attack paths for top risks |
 | [`backlog-example.md`](backlog-example.md) | A triaged `security-reviews/backlog.md` showing all five statuses and what the next review does with each |
+| [`security-review-remote-example.md`](security-review-remote-example.md) | Remote repository review (OWASP NodeGoat @ `c5cb68a`): URL → shallow clone → commit-pinned report with repo-name slug, cross-target notes, shallow-clone history caveat |
 
 ## Walkthrough 1 — First Security Review
 
@@ -37,8 +38,8 @@ Claude reads your code — routes, auth flows, queries, config, containers — t
 
 ```text
 security-reviews/
-  security-review-2026-10-08-0942-vuln-app.md   ← the report (see the example file)
-  findings-2026-10-08-0942.json                 ← the index (see the example JSON)
+  security-review-2026-10-10-1041-vuln-app.md   ← the report (see the example file)
+  findings-2026-10-10-1041.json                 ← the index (see the example JSON)
 ```
 
 Reading the report, top to bottom:
@@ -84,11 +85,21 @@ The output ([example](threat-model-example.md)) gives you the architectural view
 
 Use the two together: threat model finds *where* the architecture is weak; security review finds *the code* that makes it weak.
 
+## Walkthrough 5 — Reviewing a Remote Repository
+
+Evaluating a dependency, a fork, or code you don't have checked out locally:
+
+```text
+/security-review https://github.com/OWASP/NodeGoat
+```
+
+The skill shallow-clones the repo into a temp directory outside your project, analyzes it there, and writes the report with the repo name as the scope slug. The [example](security-review-remote-example.md) shows the remote-specific behaviors: the report header pins the exact commit reviewed (`c5cb68a…`), states it's a baseline for this target (deltas and the backlog apply per-repository, never across targets), and notes that the shallow clone has no git history — so history-dependent checks are called out as out of scope rather than skipped silently. If the clone fails (private repo, no credentials), the run stops and says so; the fallback is cloning manually and reviewing by local path.
+
 ## What Good Output Looks Like
 
 The examples demonstrate the quality bar the skills enforce:
 
 - Every finding cites real `file:line` — never "you might have injection somewhere"
-- Confidence ratings distinguish traced-and-unmitigated (Confirmed) from dangerous-but-unverifiable (Suspected) — watch for honest downgrades, like the example's SR-015, where a dangerous deserialization helper was downgraded because no route actually calls it
+- Confidence ratings distinguish traced-and-unmitigated (Confirmed) from dangerous-but-unverifiable (Suspected) — watch for honest downgrades, like the example's SR-027, where a dangerous deserialization helper was downgraded because no route actually calls it
 - Secrets are always redacted in evidence, with a rotation reminder
 - Controls that exist are acknowledged, not flagged

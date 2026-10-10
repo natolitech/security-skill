@@ -63,6 +63,16 @@ Post-plan addendum, delivered on request.
 
 Skills bumped to v2.1.0.
 
+## Future Work (unplanned)
+
+Consolidation of post-plan ideas recorded elsewhere; not scheduled.
+
+- **Open-redirect guidance hardening** — VF-27 (`redirect(request.args['next'])` class) was missed at v2.0.0 and caught (with a disclosed hint) at v2.1.0. Strengthen the Open Redirect section so it's caught cold; see `tests/README.md` notes.
+- **Remediation-as-comment fixture decoy** — plant a correct fix in comments next to a live vulnerable line and assert the verification pass doesn't credit the comment as a mitigation (pattern observed throughout the NodeGoat corpus).
+- **Additional regression corpora** — adopt NodeGoat (validated end-to-end 2026-10-10, report in `examples/security-review-remote-example.md`), then Juice Shop / WebGoat / RailsGoat per the ranked table in `tests/README.md`.
+- **SARIF export** — `findings.json` was chosen over SARIF in 3.4; revisit if CI integrations want native Code-scanning upload.
+- **Threat-model remote example** — the remote-review flow is exemplified for `/security-review`; produce the `/threat-model` equivalent when a remote threat-model run happens.
+
 ---
 
 ## Sequencing

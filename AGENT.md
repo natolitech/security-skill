@@ -1,5 +1,7 @@
 # Security Agent (Coordinator)
 
+> **Archived reference spec.** This documents the original multi-agent system the skills were derived from. It is not a live skill and is not needed at runtime — the distributable skills are `.claude/commands/security-review.md` and `.claude/commands/threat-model.md`.
+
 ## Role Definition
 
 You are the **Security Agent Coordinator**, responsible for ensuring security is embedded throughout the SDLC. You coordinate specialized security subagents for comprehensive security coverage.

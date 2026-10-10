@@ -38,11 +38,37 @@ so every user benefits.
    planted findings, no control-case false positives, secrets redacted.
    Don't commit the generated report.
 
-4. **Bump the version** — update the `<!-- skill: ... | version: N.N.N -->`
-   header and add a changelog entry at the bottom of the skill file.
+4. **Bump the version** — per the versioning policy below, update the
+   `<!-- skill: ... | version: N.N.N -->` header and add a changelog entry at
+   the bottom of the skill file. If the change adds or removes a
+   vulnerability-analysis section, also update README.md's "What the Security
+   Review Covers" list in the same PR.
 
 5. **Open a pull request** describing what the change catches that the
    previous version didn't.
+
+## Versioning Policy
+
+The two skills version **independently** (a change to `security-review.md`
+does not bump `threat-model.md`). Both use semver, interpreted for
+prompt-file skills:
+
+- **MAJOR** — a change to the skill's behavior contract: report structure or
+  required sections, Rules of Engagement, output filenames/formats, or
+  anything downstream tooling (CI diffs of `findings.json`, backlog
+  automation) parses.
+- **MINOR** — new capability or coverage: a new vulnerability-analysis
+  section, a new scoping mode (e.g., v2.1.0's remote targets), additive
+  report sections.
+- **PATCH** — wording fixes, remediation improvements, guidance tightening
+  with no change to what gets reported or emitted.
+
+When in doubt between minor and major, choose major — copy-installed
+consumers diff versions by hand.
+
+Repo-level history (both skills plus docs/tooling) is tracked in
+[CHANGELOG.md](CHANGELOG.md); releases are tagged per the highest skill
+version they ship.
 
 ## Repo Hygiene
 

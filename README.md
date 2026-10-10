@@ -1,5 +1,9 @@
 # Security Review Skill for Claude Code
 
+[![Lint](https://github.com/natolitech/security-skill/actions/workflows/lint.yml/badge.svg)](https://github.com/natolitech/security-skill/actions/workflows/lint.yml)
+[![Release](https://img.shields.io/badge/release-v2.1.0-blue)](https://github.com/natolitech/security-skill/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
 A distributable application security review skill for Claude Code. Engineers add this to any project to get on-demand security analysis — at any point in development, not just at release gates.
 
 ## Installation
@@ -73,6 +77,7 @@ See [INSTALL.md](INSTALL.md) for full usage details, and [examples/](examples/) 
 | `install.sh` | One-command installer for the two skills (see INSTALL.md Method 4) |
 | `examples/` | Real end-to-end outputs from both skills, with walkthroughs |
 | `CONTRIBUTING.md` | How to contribute improvements back upstream |
+| `LICENSE` | MIT license |
 
 ### Regression Corpus (this repo only)
 
@@ -90,6 +95,8 @@ See [INSTALL.md](INSTALL.md) for full usage details, and [examples/](examples/) 
 | `threat.md` | Original threat modeling subagent spec (reference) |
 | `compliance.md` | Original compliance mapping subagent spec (reference) |
 | `code.md` | Original secure code review subagent spec (reference) |
+| `docs/IMPROVEMENT-PLAN.md` | Engineering log of the v2.0.0 skill upgrade |
+| `docs/DOCS-IMPROVEMENT-PLAN.md` | Documentation review and improvement plan |
 
 The reference files document the original multi-agent security system these skills were derived from. They are not needed for the skills to function — only the two files in `.claude/commands/` need to be distributed.
 
@@ -116,6 +123,15 @@ The reference files document the original multi-agent security system these skil
 - Logging/secrets hygiene
 - LLM-application security (prompt injection, agent authorization)
 
+## Limitations
+
+Honest bounds, so you size trust correctly:
+
+- **This is not a scanner.** It does not replace SAST, dependency (SCA), or secret scanning. The skill reads code the way a senior reviewer does — it can miss findings and produce false positives (confidence ratings exist for this reason). Run `osv-scanner`, `npm audit`/`pip-audit`, `gitleaks`, and friends alongside it; the reports say so where it matters.
+- **Coverage is regression-tested on one stack** (Node/Express/Postgres — see `tests/`). Guidance for other ecosystems is written but not measured. See `tests/README.md` for the candidate corpora list.
+- **Remote reviews are shallow.** URL-target reviews clone with `--depth 1`: no git history, so history-dependent checks (secrets committed in the past) are reported as out of scope.
+- **No execution, no network.** By design the review is static: runtime behaviors, WAFs, and infrastructure posture beyond what's in the repo are out of reach, and the report says what could not be verified rather than guessing.
+
 ## Design Principles
 
 These skills were built to address common failures in AI-assisted security reviews:
@@ -125,6 +141,20 @@ These skills were built to address common failures in AI-assisted security revie
 3. **Stack-agnostic, stack-aware.** Works on any language/framework but knows what to look for in each.
 4. **Actionable output.** Every finding includes the vulnerable code and a concrete remediation pattern.
 5. **Acknowledge limits.** The skill instructs Claude to flag what it can't determine rather than fabricate findings.
+
+## Documentation Map
+
+| Question | Answer lives in |
+|----------|-----------------|
+| What is this? What does it cover? | This README |
+| How do I install it? (4 methods) | [INSTALL.md](INSTALL.md) |
+| How do I use/scoped/troubleshoot it? | [INSTALL.md](INSTALL.md#usage) · [examples/README.md](examples/README.md) |
+| What does real output look like? | [examples/](examples/) — report, findings JSON, backlog, threat model, remote review |
+| How do I test skill changes? | [tests/README.md](tests/README.md) |
+| How do I contribute changes back? | [CONTRIBUTING.md](CONTRIBUTING.md) |
+| What changed, version by version? | [CHANGELOG.md](CHANGELOG.md) · per-file changelogs in the skills |
+| How do I report a security issue in the skill? | [SECURITY.md](SECURITY.md) |
+| Why are the skills built this way? | [docs/IMPROVEMENT-PLAN.md](docs/IMPROVEMENT-PLAN.md) |
 
 ## License
 

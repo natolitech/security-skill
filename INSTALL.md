@@ -30,6 +30,7 @@ Detailed guide for installing and using the Security Review skills with Claude C
 - [Customization](#customization)
 - [Troubleshooting](#troubleshooting)
 - [Updating](#updating)
+- [License & Contributing](#license--contributing)
 
 ---
 
@@ -653,3 +654,11 @@ git pull
 ```
 
 The installer prints the versions it installed so you can confirm the update took.
+
+---
+
+## License & Contributing
+
+The skills are **MIT-licensed** ([LICENSE](LICENSE)) — any organization can use, copy, and modify them, including commercially, with no obligation to share changes back.
+
+If your improvements are generally useful, they're wanted upstream: see [CONTRIBUTING.md](CONTRIBUTING.md) for how to submit a skill change (including the regression procedure that keeps coverage measurable) and the versioning policy. Security issues in the skills themselves are handled per [SECURITY.md](SECURITY.md).

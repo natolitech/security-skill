@@ -8,20 +8,22 @@ Statuses: `open` | `confirmed` | `false-positive` | `risk-accepted` | `resolved`
 
 | ID | Report | Location | Finding | Status | Notes |
 |----|--------|----------|---------|--------|-------|
-| SR-001 | security-review-2026-10-08-0942-vuln-app.md | src/server.js:33 | Unauthenticated command injection in /api/ping | resolved | Replaced exec with execFile + host allowlist (PR #412) |
-| SR-002 | security-review-2026-10-08-0942-vuln-app.md | src/users.js:15-18 | Unauthenticated SQL injection via sort parameter | resolved | Sort column allowlisted (PR #412) |
-| SR-003 | security-review-2026-10-08-0942-vuln-app.md | src/graphql.js:21 | GraphQL: no auth, BOLA, GraphiQL enabled | confirmed | Scheduled next sprint — auth middleware + resolver checks |
-| SR-004 | security-review-2026-10-08-0942-vuln-app.md | .env, src/auth.js:6, src/ai.js:6 | Secrets committed to git and baked into image | confirmed | Keys rotated; history purge + .gitignore pending (ticket SEC-31) |
-| SR-006 | security-review-2026-10-08-0942-vuln-app.md | src/users.js:10-13 | IDOR on /api/users/:id/orders | confirmed | Fix in review (PR #418) |
-| SR-009 | security-review-2026-10-08-0942-vuln-app.md | public/app.js:11-13 | Stored XSS via profile bio innerHTML | confirmed | |
-| SR-013 | security-review-2026-10-08-0942-vuln-app.md | src/payments.js:5-20 | Client-supplied order total trusted | confirmed | |
-| SR-022 | security-review-2026-10-08-0942-vuln-app.md | src/auth.js:43-47 | Login enumeration + no rate limiting | risk-accepted | Internal beta only; revisit before public launch (ticket SEC-40) |
-| SR-028 | security-review-2026-10-08-0942-vuln-app.md | src/server.js:40-42 | Reflected XSS in /welcome | risk-accepted | Marketing page renders no user content in production |
+| SR-001 | security-review-2026-10-10-1041-vuln-app.md | src/server.js:33 | Unauthenticated command injection in /api/ping | resolved | Replaced exec with execFile + host allowlist (PR #412) |
+| SR-002 | security-review-2026-10-10-1041-vuln-app.md | src/users.js:17 | SQL injection via sort parameter on /api/admin/users | resolved | Sort column allowlisted (PR #412) |
+| SR-003 | security-review-2026-10-10-1041-vuln-app.md | src/auth.js:6 | Hardcoded JWT secret enables token forgery | resolved | Moved to env var; all tokens invalidated by rotation (PR #427) |
+| SR-004 | security-review-2026-10-10-1041-vuln-app.md | src/graphql.js:14-21 | Unauthenticated GraphQL with BOLA exposes all orders | confirmed | Auth middleware + resolver ownership checks scheduled next sprint |
+| SR-008 | security-review-2026-10-10-1041-vuln-app.md | src/users.js:10-13 | IDOR on /api/users/:id/orders | confirmed | Fix in review (PR #418) |
+| SR-013 | security-review-2026-10-10-1041-vuln-app.md | src/payments.js:5-19 | Checkout accepts client-controlled total | confirmed | Server-side price computation spec'd (ticket SEC-44) |
+| SR-015 | security-review-2026-10-10-1041-vuln-app.md | .env:1-4 | Committed .env with live secrets incl. Stripe live key | confirmed | Keys rotated; history purge + .gitignore pending (ticket SEC-31) |
+| SR-023 | security-review-2026-10-10-1041-vuln-app.md | src/auth.js:43-47 | Account enumeration via differentiated login errors | risk-accepted | Internal beta only; revisit before public launch (ticket SEC-40) |
+| SR-025 | security-review-2026-10-10-1041-vuln-app.md | src/server.js:22 | Open redirect on /login?next= | risk-accepted | Marketing page renders no user content in production |
+| SR-027 | security-review-2026-10-10-1041-vuln-app.md | src/auth.js:32-34 | node-serialize deserialization RCE (dead code) | confirmed | Delete with node-serialize removal (pairs with SR-039) |
 | SR-031 | (example) | src/legacy/report.js:88 | "XSS" in PDF export template | false-positive | Template renders server-generated labels only; no user input reaches the sink |
+| SR-034 | security-review-2026-10-10-1041-vuln-app.md | src/server.js:16 | 50 MB JSON body limit enables memory DoS | false-positive | Behind platform rate limiting and internal-only today; revisit if exposure changes |
 
-What the next review does with each status:
+## What the next review does with this file
 
-- **resolved** — dropped from the delta unless the same flaw reappears (then flagged as a regression with the original ID)
-- **confirmed** — expected to persist; appears under "Persisted" in the Since Last Review section until fixed
-- **risk-accepted** — collapsed to one line ("Previously risk-accepted: SR-022, SR-028") unless context changed — e.g., if `/welcome` started rendering user content, SR-028 would be re-reported and re-escalated with a note
-- **false-positive** — suppressed entirely at unchanged code; the report states how many known false-positives were suppressed
+- **SR-001, SR-002, SR-003** — verified fixed in code → drop from the delta as Resolved (code actually changed).
+- **SR-023, SR-025** — risk-accepted and unchanged → collapse into the one-line "Previously risk-accepted" list; re-escalate only if context changed (public launch, new exposure).
+- **SR-031, SR-034** — false-positives at unchanged code → suppressed; stated as a count, not re-reported.
+- **SR-004, SR-008, SR-013, SR-015, SR-027** — confirmed / open → normal reporting with fresh locations and a "Persisted" line each in Since Last Review.
